@@ -55,7 +55,7 @@ SuperSecureServer.py which can be found in a development directory
 
 a few url guesses shows a /develop/SuperSecureServer.py file exists
 
-Line 139 of this file directly formats the GET path into an exec() function on document serve like the following:
+Line 139 of this file directly formats the URI path into an exec() function on document serve like the following:
     info = "output = 'Document: {}'"
     exec(info.format(path))
 
