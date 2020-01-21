@@ -27,7 +27,7 @@ Looks like redis keyserv is vulnerable to dbfile ssh key injection.
 
 looks like there is a redis user on the system with a .ssh directory in /var/lib/redis/.ssh/
 
-./exploit.sh 10.10.10.160 6379 redis /var/lib/redis/.ssh/
+./redis_sshkey_dropper.sh 10.10.10.160 6379 redis /var/lib/redis/.ssh/
 
 LinEnum.sh found /opt/id_rsa.bak owned by the Matt user.
 
