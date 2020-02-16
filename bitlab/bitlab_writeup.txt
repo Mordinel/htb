@@ -1,0 +1,37 @@
+http://bitlab.htb/help/bookmarks.html
+shows some hyperlink, has some hex strings, when converted shows some login credentials.
+This is a bad attempt at obfuscation, the user would have a better time using encryption or some other method of authentication.
+
+clave:11des0081x
+
+credentials seem to work with login page, but does not give any access.
+
+nmap scan found:
+ssh port 22 running openssh v7.6, no known vulnerabilities.
+http port 80 running nginx, with gitlab instance.
+on /robots.txt, there is a /admin entry.
+browsing to /admin presents us with a login box similar to the normal gitlab login.
+logging in with clave's credentials gives us a 404 page, but authenticates us with gitlab as clave
+We can now browse through clave's projects and commit history.
+
+Adding a php reverse shell to the Administrator/Profile repository and merging to the master branch places the php file in a reachable directory.
+browsing to http://bitlab.htb/profile/shell.php will execute our shell.
+
+sudo -l
+User www-data may run the following commands on bitlab:
+    (root) NOPASSWD: /usr/bin/git pull
+
+we can run git as root!
+
+moving to /tmp and creating 2 repos, the goal is to cause an automerge that brings up nano for the commit message.
+
+run sudo /usr/bin/git pull
+when you reach nano for the commit message, to break out and get root you must:
+press ctrl+r
+press ctrl+x
+type: reset; /bin/bash 1>&0 2>&0
+
+root'd
+
+user:1e3fd81ec3aa2f1462370ee3c20b8154
+root:8d4cc131757957cb68d9a0cddccd587c

@@ -1,0 +1,223 @@
+# Nmap 7.70 scan initiated Sun Aug 11 16:08:17 2019 as: nmap -sV -sT -sC -T4 --script=discovery -v -Pn -oN deep.nmap 10.10.10.149
+Pre-scan script results:
+| broadcast-igmp-discovery: 
+|   192.168.1.254
+|     Interface: eth0
+|     Version: 2
+|     Group: 224.0.0.2
+|     Description: All Routers on this Subnet
+|   192.168.1.254
+|     Interface: eth0
+|     Version: 2
+|     Group: 224.0.0.22
+|     Description: IGMP
+|   192.168.1.254
+|     Interface: eth0
+|     Version: 2
+|     Group: 239.255.255.250
+|     Description: Organization-Local Scope (rfc2365)
+|_  Use the newtargets script-arg to add the results as targets
+| ipv6-multicast-mld-list: 
+|   fe80::c34:832e:56b6:3c00: 
+|     device: eth0
+|     mac: c4:61:8b:73:8a:f0
+|     multicast_ips: 
+|       ff02::1:ff6c:2e3c         (Solicited-Node Address)
+|       ff02::1:ff6c:2e3c         (Solicited-Node Address)
+|       ff02::1:ffd9:8cfb         (Solicited-Node Address)
+|       ff02::1:ff6c:2e3c         (Solicited-Node Address)
+|       ff02::1:ffd9:8cfb         (Solicited-Node Address)
+|       ff02::1:ffd9:8cfb         (Solicited-Node Address)
+|       ff02::1:ff6c:2e3c         (Solicited-Node Address)
+|       ff02::1:ffd9:8cfb         (Solicited-Node Address)
+|   fe80::1: 
+|     device: eth0
+|     mac: 90:67:1c:d0:95:73
+|     multicast_ips: 
+|       ff02::c                   (SSDP)
+|       ff02::1:ff00:0            (Solicited-Node Address)
+|       ff02::1:ff00:1            (NDP Solicited-node)
+|       ff02::1:2                 (All-dhcp-agents)
+|       ff05::1:3                 (unknown)
+|_      ff02::2                   (All Routers Address)
+| lltd-discovery: 
+|   192.168.1.254
+|     Hostname: BRCM_ROUTER
+|     Mac: 90:67:1c:d0:95:73 (Huawei Technologies)
+|_  Use the newtargets script-arg to add the results as targets
+| targets-asn: 
+|_  targets-asn.asn is a mandatory parameter
+| targets-ipv6-multicast-echo: 
+|   IP: fd90:671c:d095:7300::1  MAC: 90:67:1c:d0:95:73  IFACE: eth0
+|   IP: fe80::1                 MAC: 90:67:1c:d0:95:73  IFACE: eth0
+|_  Use --script-args=newtargets to add the results as targets
+| targets-ipv6-multicast-invalid-dst: 
+|   IP: fd90:671c:d095:7300::1  MAC: 90:67:1c:d0:95:73  IFACE: eth0
+|   IP: fe80::1                 MAC: 90:67:1c:d0:95:73  IFACE: eth0
+|_  Use --script-args=newtargets to add the results as targets
+| targets-ipv6-multicast-mld: 
+|   IP: fe80::1                   MAC: 90:67:1c:d0:95:73  IFACE: eth0
+|   IP: fe80::c34:832e:56b6:3c00  MAC: c4:61:8b:73:8a:f0  IFACE: eth0
+| 
+|_  Use --script-args=newtargets to add the results as targets
+| targets-ipv6-multicast-slaac: 
+|   IP: fe80::ff:cd32:3cd9:8cfb    MAC: c4:61:8b:73:8a:f0  IFACE: eth0
+|   IP: fe80::6186:a5ae:dc6c:2e3c  MAC: c4:61:8b:73:8a:f0  IFACE: eth0
+|_  Use --script-args=newtargets to add the results as targets
+Nmap scan report for 10.10.10.149
+Host is up (0.22s latency).
+Not shown: 997 filtered ports
+PORT    STATE SERVICE       VERSION
+80/tcp  open  http          Microsoft IIS httpd 10.0
+| http-auth-finder: 
+| Spidering limited to: maxdepth=3; maxpagecount=20; withinhost=10.10.10.149
+|   url                                          method
+|   http://10.10.10.149:80/                      FORM
+|   http://10.10.10.149:80/login.php?guest=true  FORM
+|_  http://10.10.10.149:80/login.php             FORM
+|_http-chrono: Request times for /; avg: 1162.04ms; min: 963.82ms; max: 1642.58ms
+| http-comments-displayer: 
+| Spidering limited to: maxdepth=3; maxpagecount=20; withinhost=10.10.10.149
+|     
+|     Path: http://10.10.10.149:80/css/style.css
+|     Line number: 160
+|     Comment: 
+|         /*   background: cornflowerblue; */
+|     
+|     Path: http://10.10.10.149:80/js/index.js
+|     Line number: 1
+|     Comment: 
+|         /* ---- particles.js config ---- */
+|     
+|     Path: http://10.10.10.149:80/css/style.css
+|     Line number: 36
+|     Comment: 
+|         /******* Login Page *******/
+|     
+|     Path: http://10.10.10.149:80/js/index.js
+|     Line number: 76
+|     Comment: 
+|_        /* ---- stats.js config ---- */
+|_http-date: Sun, 11 Aug 2019 04:09:38 GMT; +31s from local time.
+|_http-devframework: Couldn't determine the underlying framework or CMS. Try increasing 'httpspider.maxpagecount' value to spider more pages.
+| http-enum: 
+|_  /login.php: Possible admin folder
+|_http-errors: Couldn't find any error pages.
+|_http-feed: Couldn't find any feeds.
+| http-headers: 
+|   Cache-Control: no-store, no-cache, must-revalidate
+|   Pragma: no-cache
+|   Content-Length: 0
+|   Content-Type: text/html; charset=UTF-8
+|   Expires: Thu, 19 Nov 1981 08:52:00 GMT
+|   Server: Microsoft-IIS/10.0
+|   X-Powered-By: PHP/7.3.1
+|   Set-Cookie: PHPSESSID=0oveocctrvmra6u0suup1fa565; path=/
+|   Date: Sun, 11 Aug 2019 04:09:37 GMT
+|   Connection: close
+|   
+|_  (Request type: HEAD)
+|_http-mobileversion-checker: No mobile version detected.
+|_http-php-version: Version from header x-powered-by: PHP/7.3.1
+| http-referer-checker: 
+| Spidering limited to: maxpagecount=30
+|   https://cdn.jsdelivr.net:443/particles.js/2.0.0/particles.min.js
+|_  https://cdnjs.cloudflare.com:443/ajax/libs/jquery/3.1.1/jquery.min.js
+| http-security-headers: 
+|   Cache_Control: 
+|     Header: Cache-Control: no-store, no-cache, must-revalidate
+|   Pragma: 
+|     Header: Pragma: no-cache
+|   Expires: 
+|_    Header: Expires: Thu, 19 Nov 1981 08:52:00 GMT
+|_http-server-header: Microsoft-IIS/10.0
+| http-sitemap-generator: 
+|   Directory structure:
+|     /
+|       Other: 1; php: 1
+|     /css/
+|       css: 1
+|     /js/
+|       js: 1
+|   Longest directory structure:
+|     Depth: 1
+|     Dir: /css/
+|   Total files found (by extension):
+|_    Other: 1; css: 1; js: 1; php: 1
+| http-title: Support Login Page
+|_Requested resource was login.php
+| http-traceroute: 
+|_  Possible reverse proxy detected.
+| http-useragent-tester: 
+|   Status for browser useragent: 200
+|   Redirected To: login.php
+|   Allowed User Agents: 
+|     Mozilla/5.0 (compatible; Nmap Scripting Engine; https://nmap.org/book/nse.html)
+|     libwww
+|     lwp-trivial
+|     libcurl-agent/1.0
+|     PHP/
+|     Python-urllib/2.5
+|     GT::WWW
+|     Snoopy
+|     MFC_Tear_Sample
+|     HTTP::Lite
+|     PHPCrawl
+|     URI::Fetch
+|     Zend_Http_Client
+|     http client
+|     PECL::HTTP
+|     Wget/1.13.4 (linux-gnu)
+|_    WWW-Mechanize/1.34
+| http-vhosts: 
+|_127 names had status 302
+| http-waf-detect: IDS/IPS/WAF detected:
+|_10.10.10.149:80/?p4yl04d3=<script>alert(document.cookie)</script>
+|_http-xssed: No previously reported XSS vuln.
+135/tcp open  msrpc         Microsoft Windows RPC
+445/tcp open  microsoft-ds?
+|_smb-enum-services: ERROR: Script execution failed (use -d to debug)
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+|_dns-brute: Can't guess domain of "10.10.10.149"; use dns-brute.domain script argument.
+|_fcrdns: FAIL (No PTR record)
+|_msrpc-enum: Could not negotiate a connection:SMB: ERROR: Server disconnected the connection
+| smb-mbenum: 
+|_  ERROR: Failed to connect to browser service: Could not negotiate a connection:SMB: ERROR: Server disconnected the connection
+| smb-protocols: 
+|   dialects: 
+|     2.02
+|     2.10
+|     3.00
+|     3.02
+|_    3.11
+| smb2-capabilities: 
+|   2.02: 
+|     Distributed File System
+|   2.10: 
+|     Distributed File System
+|     Leasing
+|     Multi-credit operations
+|   3.00: 
+|     Distributed File System
+|     Leasing
+|     Multi-credit operations
+|   3.02: 
+|     Distributed File System
+|     Leasing
+|     Multi-credit operations
+|   3.11: 
+|     Distributed File System
+|     Leasing
+|_    Multi-credit operations
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2019-08-11 16:09:50
+|_  start_date: N/A
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sun Aug 11 16:20:29 2019 -- 1 IP address (1 host up) scanned in 732.34 seconds

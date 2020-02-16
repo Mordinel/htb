@@ -1,0 +1,40 @@
+# Nmap 7.70 scan initiated Thu Aug  8 18:28:59 2019 as: nmap -sV -Pn -p- -v -oN deep.nmap craft.htb
+Increasing send delay for 10.10.10.110 from 0 to 5 due to 579 out of 1929 dropped probes since last increase.
+Nmap scan report for craft.htb (10.10.10.110)
+Host is up (0.27s latency).
+Not shown: 65509 closed ports
+PORT      STATE    SERVICE      VERSION
+22/tcp    open     ssh          OpenSSH 7.4p1 Debian 10+deb9u5 (protocol 2.0)
+443/tcp   open     ssl/http     nginx 1.15.8
+6022/tcp  open     ssh          (protocol 2.0)
+8772/tcp  filtered unknown
+10254/tcp filtered unknown
+11164/tcp filtered suncacao-csa
+11287/tcp filtered unknown
+11661/tcp filtered unknown
+13140/tcp filtered unknown
+18934/tcp filtered unknown
+19518/tcp filtered unknown
+24600/tcp filtered unknown
+28794/tcp filtered unknown
+30069/tcp filtered unknown
+31663/tcp filtered unknown
+34259/tcp filtered unknown
+38981/tcp filtered unknown
+39661/tcp filtered unknown
+42064/tcp filtered unknown
+50816/tcp filtered unknown
+53894/tcp filtered unknown
+55262/tcp filtered unknown
+55640/tcp filtered unknown
+58044/tcp filtered unknown
+61916/tcp filtered unknown
+63776/tcp filtered unknown
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port6022-TCP:V=7.70%I=7%D=8/8%Time=5D4BC96E%P=x86_64-unknown-linux-gnu%
+SF:r(NULL,C,"SSH-2\.0-Go\r\n");
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Thu Aug  8 19:04:24 2019 -- 1 IP address (1 host up) scanned in 2124.74 seconds

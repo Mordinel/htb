@@ -1,0 +1,15 @@
+# Nmap 7.70 scan initiated Sun May 26 12:12:28 2019 as: nmap -sV -sT -Pn -v -oN luke.nmap 10.10.10.137
+Increasing send delay for 10.10.10.137 from 0 to 5 due to 62 out of 206 dropped probes since last increase.
+Nmap scan report for luke.io (10.10.10.137)
+Host is up (0.25s latency).
+Not shown: 995 closed ports
+PORT     STATE SERVICE VERSION
+21/tcp   open  ftp     vsftpd 3.0.3+ (ext.1)
+22/tcp   open  ssh?
+80/tcp   open  http    Apache httpd 2.4.38 ((FreeBSD) PHP/7.3.3)
+3000/tcp open  http    Node.js Express framework
+8000/tcp open  http    Ajenti http control panel
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sun May 26 12:15:51 2019 -- 1 IP address (1 host up) scanned in 203.62 seconds

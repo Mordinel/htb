@@ -1,0 +1,56 @@
+10.10.10.149
+ports:
+80
+135
+445
+
+on 80 you can login as guest and see a cisco router config
+min password length 12
+all have been cracked.
+secret 5: 
+$1$pdQG$o8nrSzsGXeaduXrjlvKc91:stealth1agent
+secret 7:
+rout3r:0242114B0E143F015F5D1E161713:$uperP@ssword
+admin:02375012182C1A1D751618034F36415408:Q4)sJu\Y8qz*A3?d
+
+domain:SUPPORTDESK
+SMB login works with
+hazard:stealth1agent
+
+StringBinding ncacn_np:heist.htb[\pipe\lsarpc]
+Domain SID is: S-1-5-21-4254423774-1266059056-3197185112
+
+500: SUPPORTDESK\Administrator (SidTypeUser)
+501: SUPPORTDESK\Guest (SidTypeUser)
+503: SUPPORTDESK\DefaultAccount (SidTypeUser)
+504: SUPPORTDESK\WDAGUtilityAccount (SidTypeUser)
+513: SUPPORTDESK\None (SidTypeGroup)
+1008: SUPPORTDESK\Hazard (SidTypeUser)
+1009: SUPPORTDESK\support (SidTypeUser)
+1012: SUPPORTDESK\Chase (SidTypeUser)
+1013: SUPPORTDESK\Jason (SidTypeUser)
+
+Chase:Q4)sJu\Y8qz*A3?d works for smb
+
+found winrm script to run psh commands
+added x64 meterpreter/reverse_tcp payload to it
+got session, shell.
+
+user'd
+
+a127daef77ab6d9d92008653295f59c4
+
+found admin hash in C:\inetpub\wwwroot\login.php:
+91c077fb5bcdd1eacf7268c945bc1d1ce2faf9634cba615337adbf0af4db9040
+
+dumped firefox.exe process memory with procdump64.exe
+ran strings on the output and found a web request containing a login password to the original login screen
+
+found admin PASS:
+4dD!5}x/re8]FBuZ
+
+login to smb C$ as Administrator:4dD!5}x/re8]FBuZ
+
+root'd
+
+50dfa3c6bfd20e2e0d071b073d766897

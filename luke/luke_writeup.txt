@@ -1,0 +1,36 @@
+username is likely
+Derry
+or
+
+Chihiro
+
+password
+Zk6heYCyv6ZE9Xcg
+
+this curl request logs into port 3000
+curl -X POST -H "Content-Type: application/json" -d '{"username":"admin", "password":"Zk6heYCyv6ZE9Xcg"}' http://10.10.10.137:3000/login
+
+returns a success message and a token:
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNTY0ODgwNzY5LCJleHAiOjE1NjQ5NjcxNjl9.3ZF9X91ZKT5jUcX5b8s9i7vxtP5jBtTuhrJtjk4_D
+
+dirbuster found a users directory with user credentials.
+
+Admin WX5b7)>/rp$U)FW
+Derry rZ86wwLvx7jUxtch
+Yuri bet@tester87
+Dory y:!xa=ybfe)/QD
+
+Logged into /management/login.php with derry's creds
+/management/config.json is now avaliable
+
+contains password: KpMasng6S5EtTy9Z
+
+Logged into Ajenti on port 8000 as root: KpMasng6S5EtTy9Z
+
+Click terminal on the left side, then new+
+
+root'd
+user'd
+
+root: 8448343028fadde1e2a1b0a44d01e650
+user: 58d441e500e8941f9cf3baa499e2e4da
